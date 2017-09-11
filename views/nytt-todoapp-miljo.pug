@@ -1,0 +1,52 @@
+html
+  include includes/head.pug
+  body
+    include includes/menu.pug
+    script(src='/js/changeTagListBasedOnChosenBranch.js')
+
+    div(class='col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main')
+      h1(class='page-header')
+          span Deploy Todoapp miljø
+
+      form(method='post' action='/miljo/todoapp/opprett' class='form-horizontal')
+
+        div(class='row')
+          div(class='col-sm-6 nopad-left')
+            div(class='form-group')
+              label(class='col-sm-2 control-label' for='miljonavn') Miljønavn
+              div(class='col-sm-10')
+                input(class='form-control' id='miljonavn' name='Miljo')
+                if redeploy
+                  input(type='hidden' name='Miljo')
+            div(class='form-group')
+              label(class='col-sm-2 control-label' for='node') Node
+              div(class='col-sm-10')
+                select(class='form-control' id='node' name='Server')
+                  each server in servers
+                    option=server
+
+        div(class='row')
+          each app, index in apps
+            - var panelClass = ('col-sm-6' + (index % 2 === 0 ? ' nopad-left':' nopad-right'))
+            div(class=panelClass)
+              div(class='panel panel-default')
+                div(class='panel-heading' style='overflow: hidden;')
+                  span(class='glyphicon glyphicon-hdd pad-right')
+                  span(class='panel-title' style='font-size: 1.3em;')= app.name
+
+                div(class='panel-body form-horizontal')
+                  div(class='form-group')
+                    label(class='col-sm-2 control-label' for=app.name) Branch
+                    div(class='col-sm-10')
+                      select(class='form-control branch' data-branch-app=app.repoName id=app.name name=app.nameCapitalized + 'Branch')
+                        each branch in app.branches
+                          option= branch
+                  div(class='form-group')
+                    label(class='col-sm-2 control-label' for='branch-tag-' + app.repoName) Byggnummer
+                    div(class='col-sm-10')
+                      select(class='form-control' id='branch-tag-' + app.repoName name=app.nameCapitalized + 'ByggNr')
+
+        div(class='row')
+          button(type='submit', class='btn btn-primary')
+            span(class='glyphicon glyphicon-flash')
+              span Deploy

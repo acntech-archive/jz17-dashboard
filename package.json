@@ -1,0 +1,29 @@
+{
+  "name": "jz17-dashboard",
+  "version": "1.0.0",
+  "description": "App som server en oversikt over kjørende testmiljø",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon --inspect=5858 app.js"
+  },
+  "author": "Kristian Haugene",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "async": "^2.5.0",
+    "axios": "^0.16.2",
+    "body-parser": "^1.17.2",
+    "compare-versions": "^3.0.1",
+    "escape-html": "^1.0.3",
+    "express": "^4.15.4",
+    "js-yaml": "^3.9.1",
+    "moment": "^2.18.1",
+    "pug": "^2.0.0-rc.3",
+    "request": "^2.81.0",
+    "serve-favicon": "^2.4.3",
+    "simple-git": "^1.75.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}

@@ -1,0 +1,61 @@
+html
+  include includes/head.pug
+  body
+    include includes/menu.pug
+    if selectedEnvironment
+      script(src='/js/changeTagListBasedOnChosenBranch.js')
+
+    div(class='col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main')
+      h1(class='page-header')
+        span= envTitle
+        if selectedEnvironment
+          div(class='btn-group pull-right')
+            div(class='btn-group')
+              button(type='button' class='btn btn-success dropdown-toggle' data-toggle="dropdown")
+                span(class='glyphicon glyphicon-cog')
+                span &nbsp;
+              ul(class='dropdown-menu')
+                if selectedEnvironment.dbMigrate
+                  li
+                    span(class='glyphicon glyphicon-database')
+                    a(href='#' onclick='$("#migrateDbForm").submit();return false;')
+                      span(class='glyphicon glyphicon-refresh pad-right text-primary')
+                      span Migrer lokal database
+                    form(method='post', action=selectedEnvironment.dbMigrate.url, class='form-inline', target='_blank', id='migrateDbForm', style='display:none')
+                      input(type='text' name='json' value=selectedEnvironment.dbMigrate.json hidden=true)
+                li
+                  a(href='/miljo/slett/' + environmentType + '/' + selectedEnvironment.serverName + '/' + selectedEnvironment.name)
+                    span(class='glyphicon glyphicon-trash pad-right text-danger')
+                    span Slett
+
+      if selectedEnvironment
+        each container, index in selectedEnvironment.containers
+          - var panelClass = ('col-sm-6' + (index % 2 == 0 ? ' nopad-left':' nopad-right'))
+          div(class=panelClass)
+            div(class='panel panel-default container-panel')
+              div(class='panel-heading' style='overflow: hidden;')
+                if container.serviceUrl
+                  a(href=container.serviceUrl target="_blank")
+                    span(class='glyphicon glyphicon-hdd pad-right')
+                    span(class='panel-title' style='font-size: 1.3em;')= container.serviceName
+                else
+                  span(class='glyphicon glyphicon-hdd pad-right')
+                  span(class='panel-title' style='font-size: 1.3em;')= container.serviceName
+                div(class='btn-group pull-right' role='group' aria-label="Container actions")
+                  a(class='btn btn-default' href='/logs/' + environmentType + '/' + selectedEnvironment.serverName + '/' + selectedEnvironment.name + '/' + container.id) Logg
+                  a(class='btn btn-default' href='/stop/' + environmentType + '/' + selectedEnvironment.serverName + '/' + selectedEnvironment.name + '/' + container.id) Stopp
+                  a(class='btn btn-default' href='/kill/' + environmentType + '/' + selectedEnvironment.serverName + '/' + selectedEnvironment.name + '/' + container.id) Kill
+                  a(class='btn btn-default' href='/restart/' + environmentType + '/' + selectedEnvironment.serverName + '/' + selectedEnvironment.name + '/' + container.id) Restart
+                  a(class='btn btn-default' href='/start/' + environmentType + '/' + selectedEnvironment.serverName + '/' + selectedEnvironment.name + '/' + container.id) Start
+              div(class='panel-body' style='min-height: 200px')
+                h5= "Versjon: " + container.version
+                if container.commitHash
+                  h5= "Git commit: " + container.commitHash
+                h5= "Status: " + container.status
+                h5= "State: " + container.state
+                if container.databaseName
+                  h5= "Database: " + container.databaseName
+                if container.ports.length > 0
+                  h5 Eksponerte porter:
+                  each port in container.ports
+                    h6= 'Port ' + port.PrivatePort + ' --> ' + selectedEnvironment.serverIp + ':' + port.PublicPort

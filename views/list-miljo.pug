@@ -1,0 +1,41 @@
+html
+  include includes/head.pug
+  body
+    include includes/menu.pug
+
+    div(class='col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main')
+      p(class='page-header') Det er #{envs.length} aktive #{environmentType.toUpperCase()} miljøer.
+        - var nyttMiljoHref = '/miljo/' + environmentType + '/opprett'
+        a(href=nyttMiljoHref class='pull-right')
+          span(class='glyphicon glyphicon-plus pad-right')
+          span Opprett nytt miljø
+      table(class='table table-hover')
+        thead(class='thead-default')
+          tr
+            th Navn
+            th Server
+            th Frontend
+            th Endret
+            th Opprettet
+            th Status
+        tbody
+          each env in envs
+            tr
+              td
+                a(href='/environment/' + environmentType + '/' + env.serverName + '/' + env.name)= env.name
+              td=env.serverName
+              td
+                if env.frontendContainer.serviceUrl
+                  a(href=env.frontendContainer.serviceUrl target='_blank') Gå til
+              td
+                if env.freshness !== 'success'
+                  - var freshClass = 'pad-right glyphicon glyphicon-hourglass text-' + env.freshness
+                  span(class=freshClass)
+                else
+                  span(class='pad-right glyphicon glyphicon-none')
+                span #{env.modifiedFormattedTimestamp} - #{env.modifiedAge}
+              td #{env.createdFormattedTimestamp}
+              td
+                - var stateGlyph = { success: 'ok', danger: 'remove', warning: 'warning-sign'}[env.state]
+                - var stateClass = 'glyphicon glyphicon-' + stateGlyph + ' text-' + env.state;
+                span(class=stateClass)
