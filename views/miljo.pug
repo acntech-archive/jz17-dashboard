@@ -15,14 +15,6 @@ html
                 span(class='glyphicon glyphicon-cog')
                 span &nbsp;
               ul(class='dropdown-menu')
-                if selectedEnvironment.dbMigrate
-                  li
-                    span(class='glyphicon glyphicon-database')
-                    a(href='#' onclick='$("#migrateDbForm").submit();return false;')
-                      span(class='glyphicon glyphicon-refresh pad-right text-primary')
-                      span Migrer lokal database
-                    form(method='post', action=selectedEnvironment.dbMigrate.url, class='form-inline', target='_blank', id='migrateDbForm', style='display:none')
-                      input(type='text' name='json' value=selectedEnvironment.dbMigrate.json hidden=true)
                 li
                   a(href='/miljo/slett/' + environmentType + '/' + selectedEnvironment.serverName + '/' + selectedEnvironment.name)
                     span(class='glyphicon glyphicon-trash pad-right text-danger')
