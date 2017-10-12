@@ -4,7 +4,7 @@ registry:
 
 rundeck:
   url: http://rundeck:4440/
-  authToken: T41CSm6JBGgVRySfthwCle7WjCpwRgTh
+  authToken: EpxcSF0ZtNEmK4AdSe9nIx4ozR2ubtHt
   todoapp:
     deployJob: 2565996f-06c6-4354-bcfb-5eb2692f401c
     deleteJob: 159481e0-63b2-4b6d-ac63-0c6b470bb2b8
